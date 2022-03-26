@@ -19,6 +19,7 @@ gem "puma", "~> 5.0"
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 
 gem "dotenv-rails"
+gem "telegram-bot"
 
 group :development, :test do
   gem "pry"

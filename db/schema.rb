@@ -48,6 +48,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_27_193849) do
   create_table "words", comment: "Words table", force: :cascade do |t|
     t.string "en", comment: "English word translation"
     t.string "ru", comment: "Russian word translation"
+    t.integer "locale", comment: "Locale of word for exercise check"
     t.integer "level", comment: "Word level"
     t.integer "rank", comment: "Word rank in 'Frequency lists/PG/2006/04'"
     t.datetime "created_at", null: false

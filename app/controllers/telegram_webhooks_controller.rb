@@ -8,7 +8,9 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   end
 
   def message(message)
-    respond_with :message, text: message['text']
+    result = ExerciseChecker.new.check_user_answer(@current_tg_user, message['text'].downcase)
+    respond_with_messages(result)
+    new_exercise if result.next_exercise?
   end
 
   private
@@ -20,7 +22,15 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   end
 
   def new_exercise
+    return respond_with :message, text: 'КОНЕЦ' if @current_tg_user.level > Word.maximum(:level)
+
     result = ExerciseCreator.new.create_new_exercise_for(@current_tg_user)
-    respond_with :message, text: result.message
+    respond_with_messages(result)
+  end
+
+  def respond_with_messages(result)
+    result.messages.each do |result_message|
+      respond_with :message, text: result_message
+    end
   end
 end

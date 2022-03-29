@@ -32,6 +32,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_27_193849) do
 
   create_table "rounds", comment: "Аccumulates exercises with uniq words of a certain level", force: :cascade do |t|
     t.integer "level", comment: "Words level"
+    t.integer "status", default: 0, comment: "Status to move the user to the next level"
     t.bigint "user_id", comment: "Belongs to user"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

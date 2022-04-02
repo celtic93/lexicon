@@ -30,3 +30,5 @@
 /config/database.yml
 
 *.env
+*.sql
+app/services/parser.rb

@@ -22,20 +22,31 @@ class ExerciseChecker
     end
 
     input_traslations = Word.where(locale: locale, locale => answer).pluck(opposite_locale)
-    response_text = if input_traslations.any?
-                      input_traslations.map!
-                                       .with_index { |tr, i| "#{i + 1}. #{tr}" }
-                      input_traslations.unshift("Варианты перевода слова '#{answer}'")
-                                       .join("\n")
-                    else
-                      "Переводов слова '#{answer}' не найдено"
-                    end
+    exercise_traslations = Word.where(locale: opposite_locale, opposite_locale => exercise[opposite_locale]).pluck(locale)
+
+    input_traslations_text = translations_to_text(input_traslations, answer)
+    exercise_traslations_text = translations_to_text(exercise_traslations, exercise[opposite_locale])
+
     exercise.incorrect!
     user.last_round.failed!
     result.next_exercise = true
-    result.messages.push(response_text)
-    result.messages.push("Перевод слова '#{exercise[opposite_locale]}' - #{exercise[locale]}")
+    result.messages.push(input_traslations_text)
+    result.messages.push(exercise_traslations_text)
+    result.messages.push("Загаданный перевод слова '#{exercise[opposite_locale]}' - #{exercise[locale]}")
     result
+  end
+
+  private
+
+  def translations_to_text(translations, word)
+    if translations.any?
+      translations.map!
+                       .with_index { |tr, i| "#{i + 1}. #{tr}" }
+      translations.unshift("Варианты перевода слова '#{word}'")
+                       .join("\n")
+    else
+      "Переводов слова '#{word}' не найдено"
+    end
   end
 
   class Result

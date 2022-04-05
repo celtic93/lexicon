@@ -31,4 +31,5 @@
 
 *.env
 *.sql
+*.dump
 app/services/parser.rb

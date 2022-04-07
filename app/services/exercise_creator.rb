@@ -16,8 +16,14 @@ class ExerciseCreator
       word_id: @exercise_word.id
     )
 
-    opposite_locale = { en: :ru, ru: :en }[exercise.locale.to_sym]
+    locale = exercise.locale.to_sym
+    opposite_locale = { en: :ru, ru: :en }[locale]
+    prev_correct_answers = user.last_round.exercises.correct
+                               .where(opposite_locale => exercise[opposite_locale], locale: locale)
+                               .pluck(locale)
+
     @result.messages.push(exercise[opposite_locale])
+    @result.messages.push(prev_correct_answers_to_text(prev_correct_answers)) if prev_correct_answers.any?
     @result
   end
 
@@ -39,6 +45,11 @@ class ExerciseCreator
 
     user.rounds.create(level: user.level)
     @result.messages.push('Начало нового круга')
+  end
+
+  def prev_correct_answers_to_text(answers)
+    answers.map!.with_index { |tr, i| "#{i + 1}. #{tr}" }
+    answers.unshift('Правильные ответы ранее:').join("\n")
   end
 
   class Result

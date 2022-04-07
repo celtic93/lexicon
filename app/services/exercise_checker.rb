@@ -40,10 +40,8 @@ class ExerciseChecker
 
   def translations_to_text(translations, word)
     if translations.any?
-      translations.map!
-                       .with_index { |tr, i| "#{i + 1}. #{tr}" }
-      translations.unshift("Варианты перевода слова '#{word}'")
-                       .join("\n")
+      translations.map!.with_index { |tr, i| "#{i + 1}. #{tr}" }
+      translations.unshift("Варианты перевода слова '#{word}'").join("\n")
     else
       "Переводов слова '#{word}' не найдено"
     end

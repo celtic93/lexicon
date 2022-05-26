@@ -5,7 +5,7 @@ class UserManager
     return result if user
 
     user = User.create(telegram_id: telegram_id)
-    user.rounds.create(level: 1)
+    user.rounds.create(level: 2)
     result.user = user
     result.new_user = true
     result

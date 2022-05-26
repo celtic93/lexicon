@@ -22,5 +22,6 @@ jobs:
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           HOST: ${{ secrets.HOST }}
+          PORT: ${{ secrets.PORT }}
           PROJECT: ${{ secrets.PROJECT }}
           APP_CONFIG: ${{ secrets.APP_CONFIG }}

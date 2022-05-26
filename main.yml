@@ -1,0 +1,26 @@
+# Путь до файла
+# .github/workflows/main.yml
+
+# Содержимое файла main.yml
+
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Dokku deploy
+        uses: vitalyliber/dokku-github-action@v7.0
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          HOST: ${{ secrets.HOST }}
+          PROJECT: ${{ secrets.PROJECT }}
+          APP_CONFIG: ${{ secrets.APP_CONFIG }}

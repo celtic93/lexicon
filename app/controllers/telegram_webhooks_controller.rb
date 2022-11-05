@@ -7,10 +7,25 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
     new_exercise
   end
 
-  def message(message)
-    result = ExerciseChecker.new.check_user_answer(@current_tg_user, message['text'].downcase)
-    respond_with_messages(result)
-    new_exercise if result.next_exercise?
+  def message(_message)
+    respond_with :message, text: 'Я не понимаю слов'
+  end
+
+  def callback_query(data)
+    edit_message :reply_markup, reply_markup: { inline_keyboard: [] }
+
+    case data
+    when 'show_answer'
+      result = ExerciseManager.new.show_answer(@current_tg_user)
+      respond_with_messages(result)
+    when 'correct'
+      @current_tg_user.exercises.last.correct!
+      new_exercise
+    when 'wrong'
+      result = ExerciseManager.new.show_word_translations(@current_tg_user)
+      respond_with_messages(result)
+      new_exercise
+    end
   end
 
   private
@@ -30,7 +45,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
 
   def respond_with_messages(result)
     result.messages.each do |result_message|
-      respond_with :message, text: result_message
+      respond_with :message, text: result_message[:text], reply_markup: result_message[:reply_markup]
     end
   end
 end

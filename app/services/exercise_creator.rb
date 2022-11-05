@@ -18,12 +18,17 @@ class ExerciseCreator
 
     locale = exercise.locale.to_sym
     opposite_locale = { en: :ru, ru: :en }[locale]
-    prev_correct_answers = user.last_round.exercises.correct
-                               .where(opposite_locale => exercise[opposite_locale], locale: locale)
-                               .pluck(locale)
 
-    @result.messages.push(exercise[opposite_locale])
-    @result.messages.push(prev_correct_answers_to_text(prev_correct_answers)) if prev_correct_answers.any?
+    @result.messages.push({
+                            text: exercise[opposite_locale],
+                            reply_markup: {
+                              inline_keyboard: [
+                                [
+                                  { text: 'Show answer', callback_data: 'show_answer' }
+                                ]
+                              ]
+                            }
+                          })
     @result
   end
 
@@ -32,7 +37,9 @@ class ExerciseCreator
   def new_word_for(user)
     word_ids = user.last_round.exercises.correct.pluck(:word_id)
     words = Word.where(level: user.level).where.not(id: word_ids)
-    @result.messages.push("Осталось #{words.count} слов до конца круга") if (words.length % 5).zero? && words.any?
+    if (words.length % 5).zero? && words.any?
+      @result.messages.push({ text: "Осталось #{words.count} слов до конца круга" })
+    end
     @exercise_word = words.sample
   end
 
@@ -40,16 +47,11 @@ class ExerciseCreator
     unless user.last_round.failed?
       user.update(level: user.level + 1)
       user.last_round.successful!
-      @result.messages.push("ПОЗДРАВЛЯЕМ! Вы закончили круг без ошибок и перешли на уровень #{user.level}")
+      @result.messages.push({ text: "ПОЗДРАВЛЯЕМ! Вы закончили круг без ошибок и перешли на уровень #{user.level}" })
     end
 
     user.rounds.create(level: user.level)
-    @result.messages.push('Начало нового круга')
-  end
-
-  def prev_correct_answers_to_text(answers)
-    answers.map!.with_index { |tr, i| "#{i + 1}. #{tr}" }
-    answers.unshift('Правильные ответы ранее:').join("\n")
+    @result.messages.push({ text: 'Начало нового круга' })
   end
 
   class Result

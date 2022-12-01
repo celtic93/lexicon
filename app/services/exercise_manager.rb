@@ -21,7 +21,7 @@ class ExerciseManager
   def show_word_translations(user)
     exercise = user.exercises.last
     locale = exercise.locale.to_sym
-    opposite_locale = { en: :ru, ru: :en }[locale]
+    opposite_locale = { native: :ru, ru: :native }[locale]
     result = Result.new
 
     exercise.incorrect!

@@ -13,7 +13,7 @@ class Exercise < ApplicationRecord
   }
 
   enum locale: {
-    en: 0,
+    native: 0,
     ru: 1
   }
 end

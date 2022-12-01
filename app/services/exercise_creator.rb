@@ -9,7 +9,7 @@ class ExerciseCreator
     end
 
     exercise = user.exercises.create(
-      en: @exercise_word.en,
+      native: @exercise_word.native,
       ru: @exercise_word.ru,
       locale: @exercise_word.locale,
       round_id: user.last_round.id,
@@ -17,7 +17,7 @@ class ExerciseCreator
     )
 
     locale = exercise.locale.to_sym
-    opposite_locale = { en: :ru, ru: :en }[locale]
+    opposite_locale = { native: :ru, ru: :native }[locale]
 
     prev_correct_answers = user.last_round.exercises.correct
                                .where(opposite_locale => exercise[opposite_locale], locale: locale)

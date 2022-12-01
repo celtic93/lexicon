@@ -20,7 +20,7 @@ class WordsController < ApplicationController
   # POST /words
   def create
     @word1 = Word.new(word_params.merge(locale: :ru))
-    @word2 = Word.new(word_params.merge(locale: :en))
+    @word2 = Word.new(word_params.merge(locale: :native))
 
     if @word1.save && @word2.save
       redirect_to words_url, notice: 'Word was successfully created.'
@@ -53,6 +53,6 @@ class WordsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def word_params
-    params.require(:word).permit(:en, :ru, :level, :rank)
+    params.require(:word).permit(:native, :ru, :level, :rank)
   end
 end

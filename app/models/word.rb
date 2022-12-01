@@ -1,9 +1,11 @@
 class Word < ApplicationRecord
+  belongs_to :language
+
   validates :rank, :level, presence: true
-  validates :en, uniqueness: { scope: %i[ru locale] }, if: -> { ru.present? }
+  validates :native, uniqueness: { scope: %i[ru locale] }, if: -> { ru.present? }
 
   enum locale: {
-    en: 0,
+    native: 0,
     ru: 1
   }
 

@@ -37,7 +37,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   end
 
   def new_exercise
-    return respond_with :message, text: 'КОНЕЦ' if @current_tg_user.level > Word.maximum(:level)
+    return respond_with :message, text: 'КОНЕЦ' if @current_tg_user.level > @current_tg_user.language.words.maximum(:level)
 
     result = ExerciseCreator.new.create_new_exercise_for(@current_tg_user)
     respond_with_messages(result)

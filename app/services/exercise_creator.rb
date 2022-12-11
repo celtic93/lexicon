@@ -41,7 +41,7 @@ class ExerciseCreator
 
   def new_word_for(user)
     word_ids = user.last_round.exercises.correct.pluck(:word_id)
-    words = Word.where(level: user.level).where.not(id: word_ids)
+    words = user.language.words.where(level: user.level).where.not(id: word_ids)
     if (words.length % 5).zero? && words.any?
       @result.messages.push({ text: "Осталось #{words.count} слов до конца круга" })
     end
@@ -50,7 +50,7 @@ class ExerciseCreator
 
   def new_round_for(user)
     unless user.last_round.failed?
-      user.update(level: user.level + 1)
+      user.current_language_user.update(level: user.level + 1)
       user.last_round.successful!
       @result.messages.push({ text: "ПОЗДРАВЛЯЕМ! Вы закончили круг без ошибок и перешли на уровень #{user.level}" })
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_01_180001) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_11_174746) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -30,6 +30,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_01_180001) do
     t.index ["word_id"], name: "index_exercises_on_word_id"
   end
 
+  create_table "language_users", comment: "Keeps user progress by languages and other settings", force: :cascade do |t|
+    t.bigint "language_id", comment: "Belongs to language"
+    t.bigint "user_id", comment: "Belongs to user"
+    t.integer "level", default: 1, comment: "User's word level"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["language_id"], name: "index_language_users_on_language_id"
+    t.index ["user_id"], name: "index_language_users_on_user_id"
+  end
+
   create_table "languages", comment: "Keeps connection with all words of its language", force: :cascade do |t|
     t.string "name", null: false, comment: "language name"
     t.datetime "created_at", null: false
@@ -47,9 +57,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_01_180001) do
 
   create_table "users", comment: "Users table", force: :cascade do |t|
     t.integer "telegram_id", comment: "User's id in telegram"
-    t.integer "level", default: 1, comment: "User's word level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "current_language_user_id", comment: "Belongs to current language"
+    t.index ["current_language_user_id"], name: "index_users_on_current_language_user_id"
   end
 
   create_table "words", comment: "Words table", force: :cascade do |t|
@@ -64,4 +75,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_01_180001) do
     t.index ["language_id"], name: "index_words_on_language_id"
   end
 
+  add_foreign_key "users", "language_users", column: "current_language_user_id"
 end

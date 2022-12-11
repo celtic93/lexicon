@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_11_174746) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_11_184653) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -49,10 +49,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_11_174746) do
   create_table "rounds", comment: "Аccumulates exercises with uniq words of a certain level", force: :cascade do |t|
     t.integer "level", comment: "Words level"
     t.integer "status", default: 0, comment: "Status to move the user to the next level"
-    t.bigint "user_id", comment: "Belongs to user"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_rounds_on_user_id"
+    t.bigint "language_user_id", comment: "Belongs to language_user"
+    t.index ["language_user_id"], name: "index_rounds_on_language_user_id"
   end
 
   create_table "users", comment: "Users table", force: :cascade do |t|

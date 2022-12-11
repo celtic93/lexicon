@@ -55,7 +55,7 @@ class ExerciseCreator
       @result.messages.push({ text: "ПОЗДРАВЛЯЕМ! Вы закончили круг без ошибок и перешли на уровень #{user.level}" })
     end
 
-    user.rounds.create(level: user.level)
+    user.current_language_user.rounds.create(level: user.level)
     @result.messages.push({ text: 'Начало нового круга' })
   end
 

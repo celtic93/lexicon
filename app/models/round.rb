@@ -1,5 +1,5 @@
 class Round < ApplicationRecord
-  belongs_to :user
+  belongs_to :language_user
   has_many :exercises, dependent: :destroy
 
   enum status: {

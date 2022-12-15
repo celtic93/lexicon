@@ -32,6 +32,12 @@
   </div>
 
   <div>
+    <%= form.label :language %>
+    <%= form.select :language_id,
+      options_for_select(Language.all.map { |language| [language.name, language.id] }, selected: @word.language_id) %>
+  </div>
+
+  <div>
     <%= form.submit %>
   </div>
 <% end %>

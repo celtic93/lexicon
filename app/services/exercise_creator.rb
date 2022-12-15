@@ -23,8 +23,11 @@ class ExerciseCreator
                                .where(opposite_locale => exercise[opposite_locale], locale: locale)
                                .pluck(locale)
 
+    exercise_text = "#{exercise[opposite_locale]}"\
+                    "#{prev_correct_answers_to_text(prev_correct_answers) if prev_correct_answers.any?}"
+
     @result.messages.push({
-                            text: exercise[opposite_locale],
+                            text: exercise_text,
                             reply_markup: {
                               inline_keyboard: [
                                 [
@@ -33,7 +36,6 @@ class ExerciseCreator
                               ]
                             }
                           })
-    @result.messages.push({ text: prev_correct_answers_to_text(prev_correct_answers) }) if prev_correct_answers.any?
     @result
   end
 
@@ -61,7 +63,7 @@ class ExerciseCreator
 
   def prev_correct_answers_to_text(answers)
     answers.map!.with_index { |tr, i| "#{i + 1}. #{tr}" }
-    answers.unshift('Правильные ответы ранее:').join("\n")
+    answers.unshift("\n\nПравильные ответы ранее:").join("\n")
   end
 
   class Result

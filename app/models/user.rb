@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  belongs_to :current_language_user, class_name: 'LanguageUser'
+  belongs_to :current_language_user, class_name: 'LanguageUser', optional: true
   has_one :language, through: :current_language_user
   has_many :rounds, through: :current_language_user
   has_many :exercises, dependent: :destroy

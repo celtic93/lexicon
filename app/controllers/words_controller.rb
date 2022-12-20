@@ -23,7 +23,7 @@ class WordsController < ApplicationController
     @word2 = Word.new(word_params.merge(locale: :native))
 
     if @word.save && @word2.save
-      redirect_to words_url, notice: 'Word was successfully created.'
+      redirect_to words_url(level: @word.level), notice: 'Word was successfully created.'
     else
       render :new, status: :unprocessable_entity
     end
@@ -32,7 +32,7 @@ class WordsController < ApplicationController
   # PATCH/PUT /words/1
   def update
     if @word.update(word_params)
-      redirect_to @word, notice: 'Word was successfully updated.'
+      redirect_to words_url(level: @word.level), notice: 'Word was successfully updated.'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -41,7 +41,7 @@ class WordsController < ApplicationController
   # DELETE /words/1
   def destroy
     @word.destroy
-    redirect_to words_url, notice: 'Word was successfully destroyed.'
+    redirect_to words_url(level: @word.level), notice: 'Word was successfully destroyed.'
   end
 
   private

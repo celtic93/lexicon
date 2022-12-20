@@ -1,8 +1,13 @@
 <p style="color: green"><%= notice %></p>
 
 <h1>Words</h1>
+<h3>Count <%= @words.count %></h3>
 
 <%= link_to "New word", new_word_path %>
+
+<br>
+<br>
+<br>
 
 <div id="words">
   <% @words.each do |word| %>

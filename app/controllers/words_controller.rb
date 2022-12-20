@@ -3,7 +3,7 @@ class WordsController < ApplicationController
 
   # GET /words
   def index
-    @words = Word.where(level: params[:level] || 1)
+    @words = Word.where(level: params[:level] || 1, language_id: params[:language_id] || 1)
   end
 
   # GET /words/1
